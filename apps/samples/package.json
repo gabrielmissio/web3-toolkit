@@ -1,0 +1,16 @@
+{
+  "name": "listener",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "abi-repository": "dotenvx run -- node src/abi-repository.mjs",
+    "listener": "dotenvx run -- node src/listener.mjs",
+    "vault": "dotenvx run -- node src/vault.mjs"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "^1.6.4"
+  },
+  "dependencies": {
+    "ethers": "^6.13.2"
+  }
+}

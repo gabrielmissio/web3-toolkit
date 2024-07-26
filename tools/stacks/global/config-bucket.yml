@@ -1,0 +1,34 @@
+Parameters:
+  AppName:
+    Description: The name of the application
+    Default: PrepareForDrex
+    Type: String
+    MinLength: 3
+    MaxLength: 16
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9\-]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+
+Resources:
+  ConfigBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      # VersioningConfiguration: 
+      #   Status: Enabled # TODO: Create condition to enable versioning only for prod
+      Tags:
+        - Key: AppName
+          Value: !Ref AppName
+
+Outputs:
+  S3BucketArn:
+    Value: !GetAtt ConfigBucket.Arn
+    Export:
+      Name: !Sub ${AppName}-S3ConfigBucketArn
+  S3BucketName:
+    Value: !Ref ConfigBucket
+    Export:
+      Name: !Sub ${AppName}-S3ConfigBucketName

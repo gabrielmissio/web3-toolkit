@@ -1,0 +1,10 @@
+{
+  "name": "abi-repository",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.620.0"
+  }
+}

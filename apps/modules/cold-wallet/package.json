@@ -1,0 +1,14 @@
+{
+  "name": "could-wallet",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "dotenvx run -- node src/index.mjs"
+  },
+  "dependencies": {
+    "ethers": "^6.13.1"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "^1.6.4"
+  }
+}
