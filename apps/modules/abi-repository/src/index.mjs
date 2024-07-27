@@ -5,14 +5,17 @@ import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3
 
 export default class ABIRepository {
   constructor({
-    bucketName,
     region,
-    localStoreABIsList,
+    bucketName,
+    bucketABIsPath,
     localStoreABIsPath,
+    localStoreABIsList,
   }) {
     // TODO: Validate constructor arguments
+    // NOTE: bucketName is the only required arg
 
     this.bucketName = bucketName
+    this.bucketABIsPath = bucketABIsPath || 'abis'
     this.localStoreABIsPath = localStoreABIsPath
     this.localStoreABIsList = Array.isArray(localStoreABIsList) ? localStoreABIsList : []
     this.s3Client = new S3Client({ region: region || process.env.REGION || 'us-east-1' })
@@ -28,7 +31,7 @@ export default class ABIRepository {
 
     const putObjectCommand = new PutObjectCommand({
       Bucket: this.bucketName,
-      Key: `abis/${abiName}.json`,
+      Key: `${this.bucketABIsPath}/${abiName}.json`,
       Body: JSON.stringify(abiContent),
     })
 
