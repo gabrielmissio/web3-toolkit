@@ -2,14 +2,14 @@
 
 # Check if the correct number of arguments is provided
 if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 <appName> <stage> <region>"
+    echo "Usage: $0 <appName> <region> <stage>"
     exit 1
 fi
 
 # Assign arguments to variables
 appName=$1
-stage=$2
-region=$3
+region=$2
+stage=$3
 
 # Function to get stack outputs
 get_stack_outputs() {

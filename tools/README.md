@@ -11,7 +11,13 @@ export APP_NAME=Web3ToolKit
 Get deployed stacks info
 
 ```bash
-sh ./tools/get-stacks-info.sh $APP_NAME $STAGE $REGION
+sh ./tools/get-stacks-info.sh $APP_NAME $REGION $STAGE
+```
+
+Sync local ABIs with S3
+
+```bash
+sh ./tools/abi-sync.sh $APP_NAME $REGION $STAGE
 ```
 
 ## Global
