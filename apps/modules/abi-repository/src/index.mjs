@@ -57,7 +57,7 @@ export default class ABIRepository {
 
     const getObjectCommand = new GetObjectCommand({
       Bucket: this.bucketName,
-      Key: `abis/${abiName}.json`,
+      Key: `${this.bucketABIsPath}/${abiName}.json`,
     })
 
     const { Body } = await this.s3Client.send(getObjectCommand)
