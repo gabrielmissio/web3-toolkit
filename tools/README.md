@@ -4,8 +4,8 @@ Load the envs:
 
 ```bash
 export STAGE=dev
-export REGION=sa-east-1
-export APP_NAME=PrepareForDrex
+export REGION=us-east-1
+export APP_NAME=Web3ToolKit
 ```
 
 ## Global
@@ -50,8 +50,8 @@ aws cloudformation create-stack \
 ```bash
 aws cloudformation create-stack \
     --region ${REGION} \
-    --stack-name ${APP_NAME}-VaultDynamodbTables-${STAGE} \
-    --template-body file://tools/stacks/vault/dynamodb-tables.yml \
+    --stack-name ${APP_NAME}-WalletDynamodbTables-${STAGE} \
+    --template-body file://tools/stacks/wallet/dynamodb-tables.yml \
     --parameters ParameterKey=AppName,ParameterValue=${APP_NAME}
 ```
 
@@ -60,7 +60,7 @@ aws cloudformation create-stack \
 ```bash
 aws secretsmanager create-secret \
     --region ${REGION} \
-    --name ${APP_NAME}/${STAGE}/Vault/Mnemonics \
+    --name ${APP_NAME}/${STAGE}/Wallet/Mnemonics \
     --secret-string '{
         "hardhat-default": "test test test test test test test test test test test junk"
     }'

@@ -1,55 +1,90 @@
+/* eslint-disable no-unused-vars*/
 import { HDNodeVoidWallet, HDNodeWallet } from 'ethers'
 import { bip32provider } from '../../../vault/src/index.mjs'
 
-export async function createWallet ({ walletId }) {
-}
+export default class HDWallet {
+  constructor({ bip32provider, walletRepository }) {
+    this.bip32provider = bip32provider
+    this.walletRepository = walletRepository
+  }
 
-export async function getWallet ({ walletId }) {
-}
+  async get ({ walletId, address }) {} // Just a placeholder for now...
+  async create ({ walletId, numOfTotalAccounts }) {} // Just a placeholder for now...
+  async addAccounts ({ walletId, newNumOfTotalAccounts }) {} // Just a placeholder for now...
 
-export async function getAddress ({ walletId, account, index }) {
-    // TODO: ensure not return account + index that "does not exists"
-}
+  async getNewAddress ({ walletId, accountIndex = 0 }) {} // Just a placeholder for now...
 
-export async function getNewAddress ({ walletId, account }) {
-    // Load last index from walletId + account
-}
-
-export async function simpleTx ({
+  async simpleTx ({
     walletId,
     sender,
     recipient,
     amount,
-    custom
-}) {
+    custom,
+  }) {
     const tx = {
-        // TODO: Build TX
+      // TODO: Build TX
     }
     const dp = '' // TODO: get DP from tx Sender
 
+    // NOTE: Cold wallet does not signTx, just return an "non signer TX"
     const signedTx = await bip32provider.signTx({ walletId, tx, dp })
-}
+  }
 
-export async function contractTx({
+  async contractTx ({
     walletId,
     sender,
     contractAddress,
     contractAbi,
     contractFuncName,
     contractFuncArgs,
-    custom
-}) {
-    const contractABI = [ /* Your contract ABI */ ];
+    custom,
+  }) {
+    const contractABI = [ /* Your contract ABI */ ]
     // const contractAddress = '0xYourContractAddress';
 
     const tx = {
-        // TODO: Build TX
+      // TODO: Build TX
     }
     const dp = '' // TODO: get DP from tx Sender
 
+    // NOTE: Cold wallet does not signTx, just return an "non signer TX"
     const signedTx = await bip32provider.signTx({ walletId, tx, dp })
+  }
+
+  async broadcastTx () {} // Just a placeholder for now...
 }
 
-async function _broadcastTx(signedTx) {
+// export async function simpleTx ({
+//     walletId,
+//     sender,
+//     recipient,
+//     amount,
+//     custom
+// }) {
+//     const tx = {
+//         // TODO: Build TX
+//     }
+//     const dp = '' // TODO: get DP from tx Sender
 
-}
+//     const signedTx = await bip32provider.signTx({ walletId, tx, dp })
+// }
+
+// export async function contractTx({
+//     walletId,
+//     sender,
+//     contractAddress,
+//     contractAbi,
+//     contractFuncName,
+//     contractFuncArgs,
+//     custom
+// }) {
+//     const contractABI = [ /* Your contract ABI */ ];
+//     // const contractAddress = '0xYourContractAddress';
+
+//     const tx = {
+//         // TODO: Build TX
+//     }
+//     const dp = '' // TODO: get DP from tx Sender
+
+//     const signedTx = await bip32provider.signTx({ walletId, tx, dp })
+// }
