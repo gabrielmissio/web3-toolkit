@@ -8,6 +8,12 @@ export REGION=us-east-1
 export APP_NAME=Web3ToolKit
 ```
 
+Get deployed stacks info
+
+```bash
+sh ./tools/get-stacks-info.sh $APP_NAME $STAGE $REGION
+```
+
 ## Global
 
 ### Config Bucket
