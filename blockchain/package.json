@@ -1,0 +1,13 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "hardhat": "hardhat --config hardhat.config.js"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "^1.6.4",
+    "@openzeppelin/contracts": "^5.0.2",
+    "hardhat": "^2.22.6"
+  }
+}
