@@ -19,13 +19,9 @@ export class TxBuilder {
 
     const data = readOnlyContract.interface.encodeFunctionData(contractFuncName, contractFuncArgs)
     const nonce = await this.contractHelper.provider.getTransactionCount(sender)
-    // NOTE: evaluate if we really need to include the nonce in the unsigned transaction or do it in another "layer"
+    const { chainId } = await this.contractHelper.provider.getNetwork()
+    // NOTE: evaluate if we really need to include the nonce and chainId in the unsigned transaction or do it in another "layer"
 
-    // Get the chainId from the provider
-    const network = await this.contractHelper.provider.getNetwork()
-    const chainId = network.chainId
-
-    // Define the unsigned transaction
     const unsignedTx = {
       chainId,               // Chain ID
       from: sender,          // Include sender address
@@ -44,15 +40,10 @@ export class TxBuilder {
   }
 
   async broadcastTx(signedTx) {
-    try {
-      const txResponse = await this.contractHelper.provider.broadcastTransaction(signedTx)
-      console.log('Transaction sent:', txResponse)
-      const receipt = await txResponse.wait()
-      console.log('Transaction mined:', receipt)
-      return receipt
-    } catch (error) {
-      console.error('Error sending transaction:', error)
-      throw error
-    }
+    const txResponse = await this.contractHelper.provider.broadcastTransaction(signedTx)
+    console.log('Transaction sent:', txResponse)
+    const receipt = await txResponse.wait()
+    console.log('Transaction mined:', receipt)
+    return receipt
   }
 }
