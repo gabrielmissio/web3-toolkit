@@ -1,90 +1,43 @@
-/* eslint-disable no-unused-vars*/
-import { HDNodeVoidWallet, HDNodeWallet } from 'ethers'
-import { bip32provider } from '../../../vault/src/index.mjs'
-
-export default class HDWallet {
+export class HDWallet {
   constructor({ bip32provider, walletRepository }) {
     this.bip32provider = bip32provider
     this.walletRepository = walletRepository
   }
 
-  async get ({ walletId, address }) {} // Just a placeholder for now...
-  async create ({ walletId, numOfTotalAccounts }) {} // Just a placeholder for now...
-  async addAccounts ({ walletId, newNumOfTotalAccounts }) {} // Just a placeholder for now...
+  async get ({ }) {} // Just a placeholder for now...
+  // ...
 
-  async getNewAddress ({ walletId, accountIndex = 0 }) {} // Just a placeholder for now...
-
-  async simpleTx ({
-    walletId,
-    sender,
-    recipient,
-    amount,
-    custom,
-  }) {
-    const tx = {
-      // TODO: Build TX
+  async getNewAddress ({ walletId, accountIndex = 0 }) {
+    if (typeof walletId !== 'string') {
+      throw new Error('walletId must be a string')
     }
-    const dp = '' // TODO: get DP from tx Sender
-
-    // NOTE: Cold wallet does not signTx, just return an "non signer TX"
-    const signedTx = await bip32provider.signTx({ walletId, tx, dp })
-  }
-
-  async contractTx ({
-    walletId,
-    sender,
-    contractAddress,
-    contractAbi,
-    contractFuncName,
-    contractFuncArgs,
-    custom,
-  }) {
-    const contractABI = [ /* Your contract ABI */ ]
-    // const contractAddress = '0xYourContractAddress';
-
-    const tx = {
-      // TODO: Build TX
+    if (typeof accountIndex !== 'number') {
+      throw new Error('accountIndex must be a number')
     }
-    const dp = '' // TODO: get DP from tx Sender
+    if (accountIndex < 0) {
+      throw new Error('accountIndex must be greater than or equal to 0')
+    }
+    
+    // https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki // HD Wallets
+    // https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki // Multi-Account HD Wallets   
+    const accountDerivationPath = `m/44'/60'/${accountIndex}'`
+    console.log({ accountDerivationPath })
 
-    // NOTE: Cold wallet does not signTx, just return an "non signer TX"
-    const signedTx = await bip32provider.signTx({ walletId, tx, dp })
+    // Loading current address index from account (+1) 
+    const { count: addressIndex } = await this.walletRepository.incrementCounter({ walletId, dp: accountDerivationPath })    
+
+    // m / purpose' / coinType' / account' / change / addressIndex
+    const addressDerivationPath = `${accountDerivationPath}/0/${addressIndex - 1}`
+    console.log({ addressDerivationPath })
+
+    const node = await this.bip32provider.getAddress({ walletId, dp: addressDerivationPath })  
+    const newAddress = await this.walletRepository.saveAddress({
+      walletId,
+      address: node.address,
+      dp: addressDerivationPath,
+      type: 'hd',
+    })    
+  
+    return newAddress
   }
-
-  async broadcastTx () {} // Just a placeholder for now...
 }
-
-// export async function simpleTx ({
-//     walletId,
-//     sender,
-//     recipient,
-//     amount,
-//     custom
-// }) {
-//     const tx = {
-//         // TODO: Build TX
-//     }
-//     const dp = '' // TODO: get DP from tx Sender
-
-//     const signedTx = await bip32provider.signTx({ walletId, tx, dp })
-// }
-
-// export async function contractTx({
-//     walletId,
-//     sender,
-//     contractAddress,
-//     contractAbi,
-//     contractFuncName,
-//     contractFuncArgs,
-//     custom
-// }) {
-//     const contractABI = [ /* Your contract ABI */ ];
-//     // const contractAddress = '0xYourContractAddress';
-
-//     const tx = {
-//         // TODO: Build TX
-//     }
-//     const dp = '' // TODO: get DP from tx Sender
-
-//     const signedTx = await bip32provider.signTx({ walletId, tx, dp })
-// }
