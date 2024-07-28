@@ -19,9 +19,14 @@ import WalletRepository from '../../modules/cold-wallet/src/repositories/wallet-
     bip32provider: bip32Provider,
     walletRepository
   })
-  const newAddress = await hdWallet.getNewAddress({
-    walletId: 'hardhat-default',
-    accountIndex: 1
+  // const newAddress = await hdWallet.getNewAddress({
+  //   walletId: 'hardhat-default',
+  //   accountIndex: 1
+  // })
+  // console.log({ newAddress })
+
+  const address = await hdWallet.getInfoFromAddress({
+    address: '0x9BF4beE5bfbEbb3a4b7060dAe40CA6fD49305D60'
   })
-  console.log({ newAddress })
+  console.log({ address })
 })().catch(console.error).finally(() => process.exit(0))
