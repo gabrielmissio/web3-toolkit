@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "hardhat": "hardhat --config hardhat.config.js"
+    "hardhat": "hardhat --config hardhat.config.js",
+    "deploy-contracts": "dotenvx run -- node scripts/deploy-contracts.mjs",
+    "dvp-end2end": "dotenvx run -- node scripts/dvp-end-to-end.mjs"
   },
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.6.4",
     "@openzeppelin/contracts": "^5.0.2",
     "hardhat": "^2.22.6"
+  },
+  "dependencies": {
+    "ethers": "^6.13.2"
   }
 }
