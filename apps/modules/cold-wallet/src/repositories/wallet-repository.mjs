@@ -1,5 +1,10 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import { DynamoDBDocumentClient, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb'
+import {
+  DynamoDBDocumentClient,
+  UpdateCommand,
+  QueryCommand,
+  PutCommand,
+} from '@aws-sdk/lib-dynamodb'
 
 export default class WalletRepository {
   constructor({ region, tableName }) {
@@ -9,7 +14,6 @@ export default class WalletRepository {
   }
 
   async saveAddress({ walletId, dp, ...data }) {
-
     const putCommand = new PutCommand({
       TableName: this.tableName,
       Item: {
@@ -28,10 +32,31 @@ export default class WalletRepository {
     }
   }
 
-  async incrementCounter({ walletId, dp }) {
-    // use update with set and return values
-    // should create counter from 0 if not exists
+  async getAddress({ address }) {
+    const queryCommand = new QueryCommand({
+      TableName: this.tableName,
+      IndexName: 'address-index',
+      KeyConditionExpression: 'address = :address',
+      ExpressionAttributeValues: {
+        ':address': address,
+      },
+    })
 
+    const result = await this.docClient.send(queryCommand)
+    if (result.Items.length < 1) {
+      return null
+    } 
+
+    const { SK, PK, ...data } = result.Items[0]
+  
+    return {
+      walletId: PK,
+      dp: SK,
+      ...data
+    }
+  }
+
+  async incrementCounter({ walletId, dp }) {
     const updateCommand = new UpdateCommand({
       TableName: this.tableName,
       Key: {

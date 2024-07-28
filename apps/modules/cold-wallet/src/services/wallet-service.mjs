@@ -6,8 +6,18 @@ export class HDWallet {
     this.walletRepository = walletRepository
   }
 
-  async get ({ }) {} // Just a placeholder for now...
-  // ...
+  async getInfoFromAddress ({ address }) {
+    if (typeof address !== 'string') {
+      throw new Error('address must be a string')
+    }
+    
+    const node = await this.walletRepository.getAddress({ address })
+    if (!node) {
+      throw new Error('Address not found')
+    }
+
+    return node
+  }
 
   async getNewAddress ({ walletId, accountIndex = 0 }) {
     if (typeof walletId !== 'string') {
