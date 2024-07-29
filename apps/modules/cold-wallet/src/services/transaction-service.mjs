@@ -1,4 +1,4 @@
-import { parseUnits } from 'ethers'
+import { parseUnits, Transaction } from 'ethers'
 
 export class TxBuilder {
   constructor({ contractHelper }) {
@@ -11,6 +11,7 @@ export class TxBuilder {
     contractAddress,
     contractFuncName,
     contractFuncArgs,
+    serialize = true,
   }) {
     const readOnlyContract = await this.contractHelper.getReadOnlyContract({
       contractAddress: contractAddress,
@@ -20,30 +21,29 @@ export class TxBuilder {
     const data = readOnlyContract.interface.encodeFunctionData(contractFuncName, contractFuncArgs)
     const nonce = await this.contractHelper.provider.getTransactionCount(sender)
     const { chainId } = await this.contractHelper.provider.getNetwork()
-    // NOTE: evaluate if we really need to include the nonce and chainId in the unsigned transaction or do it in another "layer"
 
+    // TODO: review gas estimation
     const unsignedTx = {
-      chainId,               // Chain ID
-      from: sender,          // Include sender address
-      to: contractAddress,   // Contract address
-      data: data,            // Encoded function call data
-      nonce: nonce,          // Nonce for the sender address
-
-      // private network does not need gasPrice and gasLimit
-      // but we are gonna include anyway, so it works with hardhat network
-      gasLimit: 100000, // Gas limit for a standard transaction
-      maxFeePerGas: parseUnits('5.0', 'gwei'), // Max fee per gas
-      maxPriorityFeePerGas: parseUnits('1.0', 'gwei'), // Max priority fee per gas
+      chainId,
+      to: contractAddress,
+      data, // Encoded function call data
+      nonce,
+      gasLimit: 200000,
+      maxFeePerGas: parseUnits('5.0', 'gwei'),
+      maxPriorityFeePerGas: parseUnits('1.0', 'gwei'),
     }
 
-    return unsignedTx
+    return serialize // EIP-1559 transaction
+      ? Transaction.from(unsignedTx).unsignedSerialized
+      : Transaction.from(unsignedTx).toJSON()
   }
 
+  // TODO: Add arg to config broadcast behavior (e.g. wait for N confirmations | no wait)
   async broadcastTx(signedTx) {
     const txResponse = await this.contractHelper.provider.broadcastTransaction(signedTx)
     console.log('Transaction sent:', txResponse)
     const receipt = await txResponse.wait()
-    console.log('Transaction mined:', receipt)
+
     return receipt
   }
 }
