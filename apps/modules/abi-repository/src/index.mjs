@@ -61,6 +61,9 @@ export default class ABIRepository {
     })
 
     const { Body } = await this.s3Client.send(getObjectCommand)
+    if (!Body) {
+      throw new Error('ABI not found')
+    }
     const data = await Body.transformToString()
 
     return JSON.parse(data)

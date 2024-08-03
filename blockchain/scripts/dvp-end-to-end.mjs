@@ -1,5 +1,4 @@
 import {
-  getWalletSigner,
   getContractInstance,
 } from '../helpers/contract-helper.mjs'
 
@@ -44,7 +43,7 @@ async function main ({ erc20Address, erc1155Address, dvpAddress }) {
 
   // Customer 1 approves DvP to spend 500 tokens
   const erc20ApproveTx = await erc20Customer1.approve(dvpAddress, 500) // spender, amount
-  
+
   // Customer 1 buys 1 unit of token 1
   const dvpExchangeTx = await dvpCustomer1.exchange(1, 1) // id, amount
 

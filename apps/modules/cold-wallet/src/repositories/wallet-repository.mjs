@@ -22,13 +22,13 @@ export default class WalletRepository {
         SK: dp,
       },
     })
-  
+
     await this.docClient.send(putCommand)
-    
+
     return {
       walletId,
       dp,
-      ...data 
+      ...data,
     }
   }
 
@@ -45,14 +45,14 @@ export default class WalletRepository {
     const result = await this.docClient.send(queryCommand)
     if (result.Items.length < 1) {
       return null
-    } 
+    }
 
     const { SK, PK, ...data } = result.Items[0]
-  
+
     return {
       walletId: PK,
       dp: SK,
-      ...data
+      ...data,
     }
   }
 

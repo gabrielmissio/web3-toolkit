@@ -1,5 +1,6 @@
 .env
 temp
+coverage
 node_modules
 blockchain/cache
 blockchain/artifacts

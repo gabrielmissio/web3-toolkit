@@ -43,7 +43,7 @@ export function getProvider () {
 
 function getNetworkConfig (address) {
   const account = wallets.has(address)
-    ? wallets.get(address)  
+    ? wallets.get(address)
     : process.env.ACCOUNT_KEY
   const url = process.env.RCP_PROVIDER_URL
 
